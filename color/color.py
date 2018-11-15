@@ -1,5 +1,23 @@
 from PIL import Image, ImageDraw
+import math
+import colorsys
 
+def step (r,g,b, repetitions=1):
+    # Credit goes to Alan Zucconi
+    # https://www.alanzucconi.com/2015/09/30/colour-sorting/
+    lum = math.sqrt( .241 * r + .691 * g + .068 * b )
+ 
+    h, s, v = colorsys.rgb_to_hsv(r,g,b)
+ 
+    h2 = int(h * repetitions)
+    lum2 = int(lum * repetitions)
+    v2 = int(v * repetitions)
+ 
+    if h2 % 2 == 1:
+        v2 = repetitions - v2
+        lum = repetitions - lum
+ 
+    return (h2, lum, v2)
 
 def get_colors(infile, outline_width, palette_length_div, outline_color, numcolors=10):
     original_image = Image.open(infile)
@@ -17,7 +35,9 @@ def get_colors(infile, outline_width, palette_length_div, outline_color, numcolo
     draw = ImageDraw.Draw(pal)
     posx = 0
     swatchsize = width/10
-
+    
+    colors.sort(key=lambda x: step(x[1][0], x[1][0], x[1][0],8)	)
+       
     # making the palette
     for count, col in colors:
         draw.rectangle([posx, 0, posx+swatchsize, palette_height], fill=col, width=outline_width, outline=outline_color)
