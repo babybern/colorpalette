@@ -36,7 +36,7 @@ def get_colors(infile, outline_width, palette_length_div, outline_color, numcolo
     posx = 0
     swatchsize = width/10
     
-    colors.sort(key=lambda x: step(x[1][0], x[1][0], x[1][0],8)	)
+    colors.sort(key=lambda x: step(x[1][0], x[1][1], x[1][2],8)	)
        
     # making the palette
     for count, col in colors:
